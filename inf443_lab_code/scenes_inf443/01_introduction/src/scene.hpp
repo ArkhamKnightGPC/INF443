@@ -14,6 +14,8 @@ using cgp::timer_basic;
 // Variables associated to the GUI (buttons, etc)
 struct gui_parameters {
 	bool display_frame = true;
+	//to control wireframe display
+	bool display_wireframe = false;
 };
 
 // The structure of the custom scene
@@ -38,7 +40,9 @@ struct scene_structure : cgp::scene_inputs_generic {
 	timer_basic timer;
 	mesh_drawable ground;
 	mesh_drawable cube;
-
+	//add sphere mesh and camel mesh here
+	mesh_drawable sphere;
+	mesh_drawable camel;
 
 
 

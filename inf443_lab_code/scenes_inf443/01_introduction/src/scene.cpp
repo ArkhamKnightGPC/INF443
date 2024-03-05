@@ -57,11 +57,34 @@ void scene_structure::initialize()
 	ground.initialize_data_on_gpu(ground_mesh);
 	ground.texture.load_and_initialize_texture_2d_on_gpu(project::path+"assets/checkboard.png");
 
+	//Create a sphere structure
+	mesh sphere_mesh = mesh_primitive_sphere(1.0f);
+	sphere.initialize_data_on_gpu(sphere_mesh);
+
+	sphere.model.scaling = 0.2f; //coordinates are multiplied by 0.2 in the shader
+	sphere.model.translation = {1, 2, 0}; //coordinates are offseted by {1,2,0} in the shader
+	sphere.material.color = {1, 0.5f, 0.5f}; //sphere will appear red (r,g,b components in [0,1])
+
+	//Same procedure for camel mesh
+	mesh camel_mesh = mesh_load_file_obj(project::path + "assets/camel.obj");
+	camel.initialize_data_on_gpu(camel_mesh);
+	camel.model.scaling = 0.5f; //adjust size
+	camel.model.translation = {-1, 1, 0.5f}; //and position
 
 
-	
+	//Apply custom shaders to cube, sphere and camel
+	opengl_shader_structure shader_custom;
+	shader_custom.load(
+		project::path + "shaders/mesh_custom/mesh_custom.vert.glsl",
+		project::path + "shaders/mesh_custom/mesh_custom.frag.glsl");
+	camel.shader = shader_custom;
+	cube.shader = shader_custom;
+	sphere.shader = shader_custom;
 
 	std::cout << "End function scene_structure::initialize()" << std::endl;
+
+	//possible to visualise and modify the projection matrix
+	std::cout << str_pretty(camera_projection.matrix()) << std::endl;
 
 }
 
@@ -70,7 +93,8 @@ void scene_structure::initialize()
 // Note that you should avoid having costly computation and large allocation defined there. This function is mostly used to call the draw() functions on pre-existing data.
 void scene_structure::display_frame()
 {
-
+	//to deactivate Zbuffer (curiosity only)
+	//glDisable(GL_DEPTH_TEST);
 
 	// Set the light to the current position of the camera
 	environment.light = camera_control.camera_model.position();
@@ -82,21 +106,44 @@ void scene_structure::display_frame()
 	//   draw(mesh_drawableName, environment);
 	// Note: scene is used to set the uniform parameters associated to the camera, light, etc. to the shader
 	draw(ground, environment);
-	draw(cube, environment);	
+	draw(cube, environment);
+	//draw sphere and camel
+	draw(sphere, environment);
+	draw(camel, environment);
+
+	//to visualise wireframes
+	if(gui.display_wireframe == true){
+		draw_wireframe(ground, environment);
+		draw_wireframe(sphere, environment);
+		draw_wireframe(cube, environment);
+		draw_wireframe(camel, environment, {1, 0, 0});//we can also set rgb color
+	}
 
 
 	// conditional display of the global frame (set via the GUI)
 	if (gui.display_frame)
 		draw(global_frame, environment);
 
-
-
+	// we have a mesure of time in the simulation
+	//std::cout << timer.t << std::endl;
+	
+	environment.uniform_generic.uniform_float["time"] = timer.t;
 
 }
 
 void scene_structure::display_gui()
 {
+	//checkbox controlling display of 3D reference axis
 	ImGui::Checkbox("Frame", &gui.display_frame);
+	
+	//checkbox controlling display of objects' wireframes
+	ImGui::Checkbox("Wireframe", &gui.display_wireframe);
+
+	//slider to control camel position
+	ImGui::SliderFloat("camel-x", &camel.model.translation.x, -2.0f, 2.0f);
+
+	//modify field of view angle (between 10 and 150 degrees)
+	ImGui::SliderFloat("Field of view", &camera_projection.field_of_view, Pi/18.0f, 15*Pi/18.0f);
 }
 
 void scene_structure::mouse_move_event()

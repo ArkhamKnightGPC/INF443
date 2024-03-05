@@ -27,7 +27,17 @@ void main()
 {
 
 	// The position of the vertex in the world space
-	vec4 position = model * vec4(vertex_position, 1.0);
+	//vec4 position = model * vec4(vertex_position, 1.0f);
+
+	//apply scaling on x axis for custom shader
+	mat4 M = transpose(
+		mat4(2.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0)
+	);
+
+	vec4 position = M * model * vec4(vertex_position, 1.0f);
 
 	// The normal of the vertex in the world space
 	mat4 modelNormal = transpose(inverse(model));

@@ -34,7 +34,7 @@ uniform mat4 view;       // View matrix (rigid transform) of the camera - to com
 
 uniform vec3 light; // position of the light
 
-
+uniform float time;
 
 // Coefficients of phong illumination model
 struct phong_structure {
@@ -126,5 +126,27 @@ void main()
 	vec3 color_shading = (Ka + Kd * diffuse_component) * color_object + Ks * specular_component * vec3(1.0, 1.0, 1.0);
 	
 	// Output color, with the alpha component
-	FragColor = vec4(color_shading, material.alpha * color_image_texture.a);
+	//FragColor = vec4(color_shading, material.alpha * color_image_texture.a);
+
+	/*FragColor = 0.8*vec4(color_shading, material.alpha * color_image_texture.a) 
+           + 0.2*abs(vec4(cos(10.0*fragment.position.z), 0.0, 0.0, 0.0));*/
+
+	// THIS ONE ROCKS!!!
+	//FragColor = abs(vec4(N.x, N.y, N.z, 0.0)); // rem. N represente la normale de la surface (dont la norme est 1).
+
+	//we use time parameter to modify color over time
+
+	FragColor = abs(cos(time)) * vec4(color_shading, material.alpha * color_image_texture.a);
+
+	if (cos(25.0 * fragment.position.z+3.0*time) < -0.5f) {
+		discard;
+	}
+
+	/* EXERCICE: 
+	Utilisez ce paramètre temporel pour déformer le maillage
+	dans le vertex shader de la manière suivante.
+	Ajoutez la possibilité de modifier la fréquence de l'oscillation
+	de la déformation à partir de l'interface.
+	*/
+	
 }

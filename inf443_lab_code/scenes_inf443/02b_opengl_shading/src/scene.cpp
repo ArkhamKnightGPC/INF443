@@ -92,6 +92,7 @@ void scene_structure::display_frame()
 
 	// Set additional uniform parameters to the shader
 	environment.uniform_generic.uniform_float["ambiant"] = gui.ambiant;
+	environment.uniform_generic.uniform_float["diffuse"] = gui.diffuse;
 	environment.uniform_generic.uniform_vec3["light_color"] = gui.light_color;
 	environment.uniform_generic.uniform_vec3["light_position"] = gui.light_position;
 
@@ -137,6 +138,7 @@ void scene_structure::display_gui()
 	ImGui::SliderFloat3("Light position", &gui.light_position[0], -3.0f, 3.0f);
 
 	ImGui::SliderFloat("Ambiant", &gui.ambiant, 0.0f, 1.0f);
+	ImGui::SliderFloat("Diffuse", &gui.diffuse, 0.0f, 1.0f);
 }
 
 void scene_structure::mouse_move_event()

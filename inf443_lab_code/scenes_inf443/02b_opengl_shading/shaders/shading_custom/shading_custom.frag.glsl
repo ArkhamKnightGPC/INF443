@@ -25,15 +25,24 @@ uniform material_structure material;
 
 // Ambiant uniform controled from the GUI
 uniform float ambiant;
+uniform float diffuse;
 uniform vec3 light_color;
 uniform vec3 light_position;
-
-
 
 void main()
 {
 	vec3 current_color;
-	current_color = ambiant * material.color * light_color;
-	FragColor = vec4(current_color, 1.0); 	// Note: the last alpha component is not used here
+	//current_color = ambiant * material.color * light_color;
 
+    //Illumination de Phong
+    vec3 dir_normal = normalize(fragment.normal);
+    vec3 dir_light = normalize(light_position - fragment.position);
+
+    float normal_dot_light = max(dot(dir_light, dir_normal), 0.0);
+
+    float coefficient = ambiant + diffuse*normal_dot_light;
+
+    current_color = coefficient * material.color * light_color;
+
+	FragColor = vec4(current_color, 1.0); 	// Note: the last alpha component is not used here
 }

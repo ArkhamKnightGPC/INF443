@@ -25,7 +25,7 @@ in struct fragment_data
 layout(location=0) out vec4 FragColor;
 
 
-// Uniform values that must be send from the C++ code
+// Uniform values that must be sent from the C++ code
 // ***************************************************** //
 
 uniform sampler2D image_texture;   // Texture image identifiant

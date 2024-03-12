@@ -20,6 +20,7 @@ struct gui_parameters {
 	vec3 light_position = { -2, 2, 2 };
 
 	float ambiant = 1.0f;
+	float diffuse = 1.0f;
 };
 
 // The structure of the custom scene

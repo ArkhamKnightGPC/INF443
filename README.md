@@ -2,6 +2,14 @@
 
 Assignments from the course 3D computer graphics at École polytechnique. The projects in this repository were made in C++ using [OpenGL](https://learnopengl.com/Introduction). The repository also contains screenshots showcasing the scenes developed.
 
+## Running locally
+
+The ***inf443_lab_code*** folder contains all the exercises developed during lab sessions. Makefiles are provided to compile each exercise. In order to run them locally, navigate to an exercise's root folder and run
+
+> make
+
+> ./exercice_name
+
 ## Lab Exercises
 
 ### Lab 1: Basic 3D scene and shader effects

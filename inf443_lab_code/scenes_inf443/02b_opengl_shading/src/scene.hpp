@@ -19,8 +19,12 @@ struct gui_parameters {
 	vec3 light_color = { 1,1,1 };
 	vec3 light_position = { -2, 2, 2 };
 
-	float ambiant = 1.0f;
-	float diffuse = 1.0f;
+	float ambiant = 0.3f;
+	//Phong parameters
+	float diffuse = 0.8f;
+	float specular = 0.25f;
+	float exp_specular = 1;
+	vec3 fog_color = {1, 1, 1};
 };
 
 // The structure of the custom scene

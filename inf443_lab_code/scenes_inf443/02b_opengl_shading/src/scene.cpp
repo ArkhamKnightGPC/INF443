@@ -92,9 +92,16 @@ void scene_structure::display_frame()
 
 	// Set additional uniform parameters to the shader
 	environment.uniform_generic.uniform_float["ambiant"] = gui.ambiant;
-	environment.uniform_generic.uniform_float["diffuse"] = gui.diffuse;
 	environment.uniform_generic.uniform_vec3["light_color"] = gui.light_color;
 	environment.uniform_generic.uniform_vec3["light_position"] = gui.light_position;
+
+	//add parameters for Phong Ilumination
+	environment.uniform_generic.uniform_float["diffuse"] = gui.diffuse;
+	environment.uniform_generic.uniform_float["specular"] = gui.specular;
+	environment.uniform_generic.uniform_float["exp_specular"] = gui.exp_specular;
+	environment.uniform_generic.uniform_vec3["fog_color"] = gui.fog_color;
+
+	environment.background_color = gui.fog_color;
 
 	sphere_light.model.translation = gui.light_position;
 	sphere_light.material.color = gui.light_color * 0.8f;
@@ -139,6 +146,9 @@ void scene_structure::display_gui()
 
 	ImGui::SliderFloat("Ambiant", &gui.ambiant, 0.0f, 1.0f);
 	ImGui::SliderFloat("Diffuse", &gui.diffuse, 0.0f, 1.0f);
+	ImGui::SliderFloat("Specular", &gui.specular, 0.0f, 1.0f);
+	ImGui::SliderFloat("Specular exp", &gui.exp_specular, 0, 256);
+	ImGui::ColorEdit3("Fog color", &gui.fog_color[0]);
 }
 
 void scene_structure::mouse_move_event()

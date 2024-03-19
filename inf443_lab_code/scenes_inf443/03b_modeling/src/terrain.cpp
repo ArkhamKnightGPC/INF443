@@ -90,7 +90,21 @@ std::vector<cgp::vec3> generate_positions_on_terrain(int N, float terrain_length
         float y = (v - 0.5f) * terrain_length;
         float z = evaluate_terrain_height(x,y);
 
-        positions.push_back(vec3{x,y,z});
+        bool chk = true;
+
+        for(int j=0; j<positions.size(); j++){
+            cgp::vec3 pj = positions[j];
+            float dist = pow(pow(x - pj[0], 2) + pow(y - pj[1], 2) + pow(z - pj[2], 2), 0.5);
+            if(dist < 2){
+                chk = false;
+            }
+        }
+
+        if(chk){
+            positions.push_back(vec3{x,y,z});
+        }else{
+            i--;
+        }
     }
 
     return positions;

@@ -56,9 +56,6 @@ void scene_structure::display_frame()
 		draw_wireframe(terrain, environment);
 		draw_wireframe(tree, environment);
 	}
-
-
-
 }
 
 

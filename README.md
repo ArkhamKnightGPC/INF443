@@ -50,7 +50,7 @@ Additionally, a fog effect was added to make objects gradually fade away as dist
 
 ### Lab 3: 3D modelisation
 
-In this lab, we explored modeling 3D surfaces using their parametric description. We coded meshes for a 3D terrain and a tree that was then procedurally added at random positions of the terrain in the final scene.
+In this lab, we explored modeling 3D surfaces using their parametric description. We coded meshes for a 3D terrain and a tree that was then procedurally added at random positions of the terrain in the final scene. Random positions were checked to ensure that trees did not intersect.
 
 ![modelisation1](screenshots/Modelisation_trees.png)
 

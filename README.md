@@ -7,6 +7,7 @@ Assignments from the course 3D computer graphics at École polytechnique. The pr
  - [Lab Exercises](#lab-exercises)
     - [Lab 1: Basic 3D scene and shader effects](#lab1)
     - [Lab 2: Phong Shading](#lab2)
+    - [Lab 3: 3D modelisation](#lab3)
  - [Course project](#course-project)
 
 <a id="running-locally"></a>
@@ -44,6 +45,14 @@ In order to visualize depth on the projected image, shading is essencial. In thi
 Additionally, a fog effect was added to make objects gradually fade away as distance increases.
 
 ![shader3](screenshots/Shader_Phong_Fog.png)
+
+<a id="lab3"></a>
+
+### Lab 3: 3D modelisation
+
+In this lab, we explored modeling 3D surfaces using their parametric description. We coded meshes for a 3D terrain and a tree that was then procedurally added at random positions of the terrain in the final scene.
+
+![modelisation1](screenshots/Modelisation_trees.png)
 
 <a id="course-project"></a>
 

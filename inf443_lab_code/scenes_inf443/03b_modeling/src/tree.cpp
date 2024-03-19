@@ -1,4 +1,7 @@
 #include "tree.hpp"
+#include <math.h>       /* sin, cos */
+
+# define M_PI           3.14159265358979323846  /* pi */
 
 using namespace cgp;
 
@@ -17,6 +20,34 @@ mesh create_cylinder_mesh(float radius, float height)
     // Similar with the triangle connectivity:
     //  m.connectivity.push_back(uint3{index_1, index_2, index_3});
 
+    float mesh_size = 100;// 50 points in the base, 50 points at the top
+
+    // Fill cylinder geometry
+    for(int ku=0; ku<mesh_size; ++ku){
+        float scale_factor = 2.0/(mesh_size-2);
+        float x,y,z;
+
+        float theta = 2*M_PI*scale_factor*(ku/2);
+        x = radius*cos(theta);
+        y = radius*sin(theta);
+
+        if(ku%2 == 0){//point in base
+            z = 0;
+        }else{//point at the top
+            z = height;
+        }
+
+        m.position.push_back(vec3{x,y,z});
+    }
+
+    // Generate triangle organization
+    //  Parametric surface with uniform grid sampling: generate 2 triangles for each grid cell
+    for(int ku=0; ku < mesh_size-2; ku++){
+
+            uint3 triangle = {ku, ku+1, ku+2};
+
+            m.connectivity.push_back(triangle);
+    }
 
     // Need to call fill_empty_field() before returning the mesh 
     //  this function fill all empty buffer with default values (ex. normals, colors, etc).
@@ -31,8 +62,62 @@ mesh create_cone_mesh(float radius, float height, float z_offset)
     // To do: fill this mesh ...
     // ...
 
+    float mesh_size = 100;// 50 points in the base, 50 points at the top
+
+    // Fill cylinder geometry
+    for(int ku=0; ku<mesh_size; ++ku){
+        float scale_factor = 2.0/(mesh_size-2);
+        float x,y,z;
+
+        float theta = 2*M_PI*scale_factor*(ku/2);
+
+        if(ku%2 == 0){//point in base
+            x = radius*cos(theta);
+            y = radius*sin(theta);
+            z = 0;
+        }else{//point at the top
+            x = 0;
+            y = 0;
+            z = height + z_offset;
+        }
+
+        m.position.push_back(vec3{x,y,z});
+    }
+
+    // Generate triangle organization
+    //  Parametric surface with uniform grid sampling: generate 2 triangles for each grid cell
+    for(int ku=0; ku < mesh_size-2; ku++){
+
+            uint3 triangle = {ku, ku+1, ku+2};
+
+            m.connectivity.push_back(triangle);
+    }
+
     m.fill_empty_field();
     return m;
 }
 
+mesh create_tree()
+{
+    float h = 0.7f; // trunk height
+    float r = 0.1f; // trunk radius
+
+    // Create a brown trunk
+    mesh trunk = create_cylinder_mesh(r, h);
+    trunk.color.fill({0.4f, 0.3f, 0.3f});
+
+
+    // Create a green foliage from 3 cones
+    mesh foliage = create_cone_mesh(4*r, 6*r, 0.0f);      // base-cone
+    foliage.push_back(create_cone_mesh(4*r, 6*r, 2*r));   // middle-cone
+    foliage.push_back(create_cone_mesh(4*r, 6*r, 4*r));   // top-cone
+    foliage.translate({0,0,h});       // place foliage at the top of the trunk
+    foliage.color.fill({0.4f, 0.6f, 0.3f});
+       
+    // The tree is composed of the trunk and the foliage
+    mesh tree = trunk;
+    tree.push_back(foliage);
+
+    return tree;
+}
 

@@ -37,8 +37,8 @@ struct scene_structure : cgp::scene_inputs_generic {
 	// Elements and shapes of the scene
 	// ****************************** //
 
-	cgp::mesh_drawable terrain;
-
+	cgp::mesh_drawable terrain, tree;
+	std::vector<cgp::vec3> tree_positions;
 
 
 	// ****************************** //

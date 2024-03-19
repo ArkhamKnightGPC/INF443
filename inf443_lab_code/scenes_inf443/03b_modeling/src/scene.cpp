@@ -27,6 +27,12 @@ void scene_structure::initialize()
 	terrain.material.color = { 0.6f,0.85f,0.5f };
 	terrain.material.phong.specular = 0.0f; // non-specular terrain material
 
+	int num_trees = 50;
+	tree_positions = generate_positions_on_terrain(num_trees, terrain_length);
+
+	mesh tree_mesh = create_tree();
+	tree.initialize_data_on_gpu(tree_mesh);
+	
 }
 
 
@@ -40,8 +46,18 @@ void scene_structure::display_frame()
 		draw(global_frame, environment);
 
 	draw(terrain, environment);
-	if (gui.display_wireframe)
+	for(int i=0; i<tree_positions.size(); i++){
+		cgp::vec3 tree_position = tree_positions[i];
+		tree.model.translation = tree_position;
+		draw(tree, environment);
+	}
+
+	if (gui.display_wireframe){
 		draw_wireframe(terrain, environment);
+		draw_wireframe(tree, environment);
+	}
+
+
 
 }
 

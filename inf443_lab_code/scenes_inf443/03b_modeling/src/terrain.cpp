@@ -7,13 +7,23 @@ using namespace cgp;
 // Evaluate 3D position of the terrain for any (x,y)
 float evaluate_terrain_height(float x, float y)
 {
-    vec2 p_0 = { 0, 0 };
-    float h_0 = 2.0f;
-    float sigma_0 = 3.0f;
 
-    float d = norm(vec2(x, y) - p_0) / sigma_0;
+    vec2 p_i[4] = { {-10,-10}, {5,5}, {-3,4}, {6,4} };
+    float h_i[4] = {3.0f, -1.5f, 1.0f, 2.0f};
+    float sigma_i[4] = {10, 3, 4, 4};
 
-    float z = h_0 * std::exp(-d * d);
+    //vec2 p_0 = { 0, 0 };
+    //float h_0 = 2.0f;
+    //float sigma_0 = 3.0f;
+
+    float z = 0;
+    for(int i=0; i<4; i++){
+        float d_i = norm(vec2(x, y) - p_i[i]) / sigma_i[i];
+
+        float z_i = h_i[i] * std::exp(-d_i * d_i);
+
+        z += z_i;
+    }
 
     return z;
 }
@@ -67,3 +77,21 @@ mesh create_terrain_mesh(int N, float terrain_length)
     return terrain;
 }
 
+std::vector<cgp::vec3> generate_positions_on_terrain(int N, float terrain_length){
+
+    std::vector<cgp::vec3> positions;
+
+    for(int i=0; i<N; i++){
+        float u = rand_uniform();
+        float v = rand_uniform();
+
+        //real coordinates (x,y) in the terrain
+        float x = (u - 0.5f) * terrain_length;
+        float y = (v - 0.5f) * terrain_length;
+        float z = evaluate_terrain_height(x,y);
+
+        positions.push_back(vec3{x,y,z});
+    }
+
+    return positions;
+}

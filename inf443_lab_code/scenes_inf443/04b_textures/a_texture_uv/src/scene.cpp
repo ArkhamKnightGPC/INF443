@@ -22,25 +22,57 @@ void scene_structure::initialize()
 	// Create a quadrangle as a mesh
 	mesh quadrangle_mesh;
 	quadrangle_mesh.position = { {-1,-1,0}, { 1,-1,0}, { 1, 1,0}, {-1, 1,0} };
-	quadrangle_mesh.uv = { {0,0}, {1,0}, {1,1}, {0,1} }; // Associate Texture-Coordinates to the vertices of the quadrangle
+
+	// Associate Texture-Coordinates to the vertices of the quadrangle
+	//quadrangle_mesh.uv = { {0,0}, {1,0}, {1,1}, {0,1} }; 
+
+	//EXPERIMENTS
+	//quadrangle_mesh.uv   = { {0,0}, {0.5f,0}, {0.5f,0.5f}, {0,0.5f} };
+	//quadrangle_mesh.uv   = { {0.25,0.25}, {0.5,0.25}, {0.5,0.5}, {0.25,0.5} };
+	quadrangle_mesh.uv   = { {0,0}, {2,0}, {2,2}, {0,2} };
+	//quadrangle_mesh.uv   = { {0,0}, {1,0}, {1,3}, {0,3} };
+	//quadrangle_mesh.uv   = { {-1,-1}, {2,-1}, {2,2}, {-1,2} };
+
 	quadrangle_mesh.connectivity = { {0,1,2}, {0,2,3} };
 
 	quadrangle_mesh.fill_empty_field(); // (fill with some default values the other buffers (colors, normals) that we didn't filled before)
 
 
 	// Convert the mesh structure into a mesh_drawable structure
-	shape.initialize_data_on_gpu(quadrangle_mesh);
+	quad_shape.initialize_data_on_gpu(quadrangle_mesh);
+
+	mesh torus_mesh = torus_with_texture();
+	torus_shape.initialize_data_on_gpu(torus_mesh);
+
+	mesh tree_mesh = cylinder_with_texture();
+	cylinder_shape.initialize_data_on_gpu(tree_mesh);
+
+	mesh disc_mesh = disc_with_texture();
+	disc_shape.initialize_data_on_gpu(disc_mesh);
 
 
 	// Texture Image load and association
 	//-----------------------------------	
 
 	// Load an image from a file, and send the result to the GPU
-	shape.texture.load_and_initialize_texture_2d_on_gpu(project::path + "assets/squirrel.jpg",
+	quad_shape.texture.load_and_initialize_texture_2d_on_gpu(project::path + "assets/squirrel.jpg",
+		GL_REPEAT, //alternatives: GL_CLAMP_TO_BORDER, GL_MIRRORED_REPEAT
+		GL_REPEAT)
+		;
+
+	torus_shape.texture.load_and_initialize_texture_2d_on_gpu(project::path + "assets/smiley.png",
+		GL_REPEAT,
+		GL_REPEAT);
+
+	cylinder_shape.texture.load_and_initialize_texture_2d_on_gpu(
+		project::path + "assets/trunk.jpg",
+		GL_REPEAT,
+		GL_REPEAT);
+
+	disc_shape.texture.load_and_initialize_texture_2d_on_gpu(
+		project::path + "assets/tree-ring.png",
 		GL_CLAMP_TO_BORDER,
 		GL_CLAMP_TO_BORDER);
-
-
 }
 
 
@@ -53,8 +85,27 @@ void scene_structure::display_frame()
 	if (gui.display_frame)
 		draw(global_frame, environment);
 
-	draw(shape, environment);
-	draw_wireframe(shape, environment, { 1,0,0 });
+	//draw(shape, environment);
+	quad_shape.model.translation = vec3{0, 0, 0};
+	draw(quad_shape, environment);
+
+	torus_shape.model.translation = vec3{-4, 0, 0};
+	draw(torus_shape, environment);
+
+	cylinder_shape.model.translation = vec3{3, 0, 0};
+	draw(cylinder_shape, environment);
+
+	disc_shape.model.translation = vec3{3, 0, 2};
+	draw(disc_shape, environment);
+	disc_shape.model.translation = vec3{3, 0, -2};
+	draw(disc_shape, environment);
+
+	if(gui.display_wireframe){
+		draw_wireframe(quad_shape, environment, { 1,0,0 });
+		draw_wireframe(torus_shape, environment, { 1,0,0 });
+		draw_wireframe(cylinder_shape, environment, { 1,0,0 });
+		//draw_wireframe(disc_shape, environment, { 1,0,0 });
+	}
 }
 
 void scene_structure::display_gui()

@@ -34,7 +34,7 @@ mesh torus_with_texture()
 
             // Store vertex coordinates
             torus.position[kv+N*ku] = p;
-            // torus.uv[kv+N*ku] = {...,...};
+            torus.uv[kv+N*ku] = {15*v, 5*u};
         }
     }
 
@@ -86,7 +86,7 @@ mesh cylinder_with_texture()
 
             // Store vertex coordinates
             cylinder.position[kv+N*ku] = p;
-            // cylinder.uv[kv+N*ku] = ...
+            cylinder.uv[kv+N*ku] = {u, v};
         }
     }
 
@@ -122,12 +122,12 @@ mesh disc_with_texture()
 		float u = k/(N-1.0f);
 		vec3 p = r * vec3(std::cos(2* Pi *u), std::sin(2* Pi *u), 0.0f);
 		disc.position.push_back(p);
-        // disc.uv.push_back(...)
+        disc.uv.push_back({0.5 + 6*r*std::cos(2* Pi *u)/N, 0.5 + 6*r*std::sin(2* Pi *u)/N});
 		
 	}
 	// middle point
     disc.position.push_back({0,0,0});
-    // disc.uv.push_back(...)
+    disc.uv.push_back({0.5, 0.5});
 
 	for (int k = 0; k < N-1; ++k)
 		disc.connectivity.push_back( uint3{ N, k, k+1});

@@ -1,0 +1,10 @@
+#pragma once
+
+#include "cgp/cgp.hpp"
+
+
+cgp::mesh create_cylinder_mesh(float radius, float height);
+cgp::mesh create_cone_mesh(float radius, float height, float z_offset);
+cgp::mesh create_tree();
+std::vector<cgp::vec3> generate_positions_on_terrain(int N, float terrain_length);
+

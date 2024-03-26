@@ -8,6 +8,7 @@ Assignments from the course 3D computer graphics at École polytechnique. The pr
     - [Lab 1: Basic 3D scene and shader effects](#lab1)
     - [Lab 2: Phong Shading](#lab2)
     - [Lab 3: 3D modelisation](#lab3)
+    - [Lab 4: Textures](#lab4)
  - [Course project](#course-project)
 
 <a id="running-locally"></a>
@@ -53,6 +54,14 @@ Additionally, a fog effect was added to make objects gradually fade away as dist
 In this lab, we explored modeling 3D surfaces using their parametric description. We coded meshes for a 3D terrain and a tree that was then procedurally added at random positions of the terrain in the final scene. Random positions were checked to ensure that trees did not intersect.
 
 ![modelisation1](screenshots/Modelisation_trees.png)
+
+<a id="lab4"></a>
+
+### Lab 4: Textures
+
+In this lab, we experimented with applying various textures to different mesh geometries (tiles, toruses, cylinders, terrain). We also explored the use of **Perlin noise** to introuduce realistic distortions on textures. Finally we explored semi-transparent textures that use 2D images that rotate with the camera to give the feeling of a 3D object.
+
+![textures](screenshots/Textures.png)
 
 <a id="course-project"></a>
 

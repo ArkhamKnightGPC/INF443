@@ -34,8 +34,9 @@ struct scene_structure : cgp::scene_inputs_generic {
 	// ****************************** //
 
 	cgp::mesh terrain_mesh;
-	cgp::mesh_drawable terrain_drawable;
+	cgp::mesh_drawable terrain_drawable, tree;
 	perlin_noise_parameters parameters;
+	std::vector<cgp::vec3> tree_positions;
 
 	// ****************************** //
 	// Functions

@@ -1,4 +1,5 @@
 #include "scene.hpp"
+#include "tree.hpp"
 
 
 using namespace cgp;
@@ -19,6 +20,11 @@ void scene_structure::initialize()
 	terrain_drawable.initialize_data_on_gpu(terrain_mesh);
 	update_terrain(terrain_mesh, terrain_drawable, parameters);
 
+	int num_trees = 50;
+	tree_positions = generate_positions_on_terrain(num_trees, 180);
+
+	mesh tree_mesh = create_tree();
+	tree.initialize_data_on_gpu(tree_mesh);
 }
 
 
@@ -32,6 +38,13 @@ void scene_structure::display_frame()
 		draw(global_frame, environment);
 
 	draw(terrain_drawable, environment);
+
+	for(int i=0; i<tree_positions.size(); i++){
+		cgp::vec3 tree_position = tree_positions[i];
+		tree.model.translation = tree_position;
+		draw(tree, environment);
+	}
+
 	if (gui.display_wireframe)
 		draw_wireframe(terrain_drawable, environment);
 }

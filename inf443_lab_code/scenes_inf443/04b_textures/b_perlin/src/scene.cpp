@@ -1,10 +1,7 @@
 #include "scene.hpp"
-#include "tree.hpp"
 
 
 using namespace cgp;
-
-
 
 
 void scene_structure::initialize()

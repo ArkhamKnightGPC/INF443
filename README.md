@@ -63,6 +63,14 @@ In this lab, we experimented with applying various textures to different mesh ge
 
 ![textures](screenshots/Textures.png)
 
+### Lab 5: Animation
+
+In this lab, we experimented with simple hierarchical transformations to animate motion.
+
+![animation](screenshots/demo_animation.gif)
+
+![bird_animation](screenshots/demo_animation.gif)
+
 <a id="course-project"></a>
 
 ## Course Project

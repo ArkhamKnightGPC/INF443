@@ -24,6 +24,8 @@ void scene_structure::initialize()
 	mesh_drawable eye_right;
 	mesh_drawable wing_left;
 	mesh_drawable wing_right;
+	mesh_drawable wing_son_left;
+	mesh_drawable wing_son_right;
 
 	// Create the geometry of the meshes
 	//   Note: this geometry must be set in their local coordinates with respect to their position in the hierarchy (and with respect to their animation)
@@ -32,8 +34,8 @@ void scene_structure::initialize()
 	beak.initialize_data_on_gpu(mesh_primitive_cone(0.35, 0.35, {0,0,0}, {1,0,0}));
 	eye_left.initialize_data_on_gpu(mesh_primitive_sphere(1.0)); eye_left.model.scaling_xyz = vec3{0.03, 0.1, 0.1};
 	eye_right.initialize_data_on_gpu(mesh_primitive_sphere(1.0)); eye_right.model.scaling_xyz = vec3{0.03, 0.1, 0.1};
-	wing_left.initialize_data_on_gpu(mesh_primitive_quadrangle({1,1,0}, {0,1,0}, {0,0,0}, {1,0,0})); wing_left.model.scaling_xyz = vec3{1.7, 1.7, 1.0};
-	wing_right.initialize_data_on_gpu(mesh_primitive_quadrangle({1,1,0}, {0,1,0}, {0,0,0}, {1,0,0})); wing_right.model.scaling_xyz = vec3{1.7, 1.7, 1.0};
+	wing_left.initialize_data_on_gpu(mesh_primitive_quadrangle({1,1,0}, {0,1,0}, {0,0,0}, {1,0,0})); wing_left.model.scaling_xyz = vec3{1.7, 2, 1.0};
+	wing_right.initialize_data_on_gpu(mesh_primitive_quadrangle({1,1,0}, {0,1,0}, {0,0,0}, {1,0,0})); wing_right.model.scaling_xyz = vec3{1.7, 2, 1.0};
 
 	// Set the color of some elements
 	vec3 white = { 1.0f, 1.0f, 1.0f };
@@ -61,6 +63,11 @@ void scene_structure::initialize()
 	hierarchy.add(eye_right, "Eye right", "Head", {0.6, 0.2, 0.3});
 	hierarchy.add(wing_left, "Wing left", "Body", {-1.0f, -.5f, 0});
 	hierarchy.add(wing_right, "Wing right", "Body", {-1.0f, .5f, 0});
+
+	body.texture.load_and_initialize_texture_2d_on_gpu(project::path + "assets/fur.jpg",
+		GL_REPEAT, //alternatives: GL_CLAMP_TO_BORDER, GL_MIRRORED_REPEAT
+		GL_REPEAT)
+		;
 }
 
 
@@ -79,12 +86,18 @@ void scene_structure::display_frame()
 
 	// Apply transformation to some elements of the hierarchy
 	
-	int aux = timer.t/M_PI;
-	double oscillation = (aux%2 == 0) ? -M_PI/2.0 + timer.t : -M_PI/2 - timer.t;
+	const float minAngle = -M_PI / 6;
+	const float maxAngle = M_PI / 6;
+	float scaled_time = 3*timer.t; // Initialize time to zero or use your time variable
+	float angle = minAngle + (maxAngle - minAngle) * 0.5f * (1 + sin(scaled_time));
 
 
-	hierarchy["Wing left"].transform_local.rotation = rotation_transform::from_axis_angle({1, 0, 0}, -M_PI -oscillation);
-	hierarchy["Wing right"].transform_local.rotation = rotation_transform::from_axis_angle({1, 0, 0}, oscillation);
+	hierarchy["Wing left"].transform_local.rotation = rotation_transform::from_axis_angle({1, 0, 0}, angle);
+	hierarchy["Wing right"].transform_local.rotation = rotation_transform::from_axis_angle({1, 0, 0}, -M_PI - angle);
+
+	float head_oscillation = 0.15 * sin(0.5*M_PI*scaled_time);
+
+	hierarchy["Head"].transform_local.rotation = rotation_transform::from_axis_angle({0, 1, 0}, head_oscillation);
 
 	// This function must be called before the drawing in order to propagate the deformations through the hierarchy
 	hierarchy.update_local_to_global_coordinates();

@@ -69,8 +69,6 @@ In this lab, we experimented with simple hierarchical transformations to animate
 
 ![animation](screenshots/demo_animation.gif)
 
-![bird_animation](screenshots/demo_animation.gif)
-
 <a id="course-project"></a>
 
 ## Course Project

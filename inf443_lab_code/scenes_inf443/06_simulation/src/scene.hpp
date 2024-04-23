@@ -48,13 +48,13 @@ struct scene_structure : cgp::scene_inputs_generic {
 	timer_basic timer;
 
 	// Particles:
-	vec3 pA; // position of particle A
-	vec3 pB; // position of particle B
-	vec3 vA; // velocity of particle A
-	vec3 vB; // velocity of particle B
 	float L0; // Rest-length of spring
 
-
+	int cnt_particles;
+	std::vector<vec3> points; //position of particles
+	std::vector<vec3> speeds; //speed of particles
+	
+	vec3 colors[3];
 
 	// ****************************** //
 	// Functions

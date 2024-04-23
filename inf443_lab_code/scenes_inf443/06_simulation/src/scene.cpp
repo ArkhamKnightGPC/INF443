@@ -25,19 +25,20 @@ void scene_structure::simulation_step(float dt)
 
 	vec3 g = { 0,0,-9.81f }; // gravity
 
+	vec3 f_spring_below = {0,0,0};
+	for(int i=cnt_particles-1; i >= 1; i--){
+		//Forces
+		vec3 f_spring = spring_force(points[i], points[i-1], L0, K);
+		vec3 f_weight = m * g;
+		vec3 f_damping = -mu * (speeds[i] - speeds[i-1]);
 
+		vec3 f = f_spring + f_weight + f_damping - f_spring_below;
+		f_spring_below = f_spring;
 
-	// Forces
-	vec3 fB_spring = spring_force(pB, pA, L0, K);
-	vec3 fB_weight = m * g;
-	vec3 fB_damping = -mu * vB;
-	vec3 fB = fB_spring + fB_weight + fB_damping;
-
-	// Numerical Integration
-	vB = vB + dt * fB / m;
-	pB = pB + dt * vB;
-
-
+		// Numerical integration
+		speeds[i] = speeds[i] + dt * f / m;
+		points[i] = points[i] + dt * speeds[i];
+	}
 
 }
 
@@ -46,6 +47,13 @@ void scene_structure::draw_segment(vec3 const& a, vec3 const& b)
 {
 	segment.vbo_position.update(numarray<vec3>{ a, b });
 	draw(segment, environment);
+}
+
+vec3 random_rgb(){
+	double r = (rand()%256)/256.0f;
+	double g = (rand()%256)/256.0f;
+	double b = (rand()%256)/256.0f;
+	return {r, g, b};
 }
 
 void scene_structure::initialize()
@@ -60,13 +68,18 @@ void scene_structure::initialize()
 
 	// Initial position and speed of particles
 	// ******************************************* //
-	pA = { 0,0,0 };
-	vB = { 0,0,0 };
 
-	pB = { 0.0f,0.45f,0.0f };
-	vB = { 0,0,0 };
+	cnt_particles = 10;
+	for(int i=0; i<cnt_particles; i++){
+		points.push_back({0, i/1000.0f, 0});
+		speeds.push_back({0, 0, 0});
+	}
 
-	L0 = 0.4f;
+	L0 = 0.1f;
+
+	for(int i=0; i<3; i++){
+		colors[i] = random_rgb();
+	}
 
 	particle_sphere.initialize_data_on_gpu(mesh_primitive_sphere(0.05f));
 	segment.display_type = curve_drawable_display_type::Segments;
@@ -75,11 +88,6 @@ void scene_structure::initialize()
 
 
 }
-
-
-
-
-
 
 void scene_structure::display_frame()
 {
@@ -95,15 +103,15 @@ void scene_structure::display_frame()
 
 	simulation_step(timer.scale * 0.01f);
 
-	particle_sphere.model.translation = pA;
-	particle_sphere.material.color = { 0,0,0 };
-	draw(particle_sphere, environment);
+	for(int i=0; i<cnt_particles; i++){
+		particle_sphere.model.translation = points[i];
+		particle_sphere.material.color = colors[i%3];
+		draw(particle_sphere, environment);
 
-	particle_sphere.model.translation = pB;
-	particle_sphere.material.color = { 1,0,0 };
-	draw(particle_sphere, environment);
-
-	draw_segment(pA, pB);
+		if(i > 0){
+			draw_segment(points[i-1], points[i]);
+		}
+	}
 
 }
 

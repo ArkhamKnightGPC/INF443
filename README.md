@@ -9,6 +9,8 @@ Assignments from the course 3D computer graphics at École polytechnique. The pr
     - [Lab 2: Phong Shading](#lab2)
     - [Lab 3: 3D modelisation](#lab3)
     - [Lab 4: Textures](#lab4)
+    - [Lab 5: Animation](#lab5)
+    - [Lab 6: Simulation](#lab6)
  - [Course project](#course-project)
 
 <a id="running-locally"></a>
@@ -59,15 +61,25 @@ In this lab, we explored modeling 3D surfaces using their parametric description
 
 ### Lab 4: Textures
 
-In this lab, we experimented with applying various textures to different mesh geometries (tiles, toruses, cylinders, terrain). We also explored the use of **Perlin noise** to introuduce realistic distortions on textures. Finally we explored semi-transparent textures that use 2D images that rotate with the camera to give the feeling of a 3D object.
+In this lab, we experimented with applying various textures to different mesh geometries (tiles, toruses, cylinders, terrain).
 
 ![textures](screenshots/Textures.png)
+
+<a id="lab5"></a>
 
 ### Lab 5: Animation
 
 In this lab, we experimented with simple hierarchical transformations to animate motion.
 
 ![animation](screenshots/demo_animation.gif)
+
+<a id="lab6"></a>
+
+### Lab 6: Simulation
+
+In this lab, we simulated an N particle spring network using explicit Euler for numerical integration of the equations of motion.
+
+![animation](screenshots/demo_simulation.gif)
 
 <a id="course-project"></a>
 

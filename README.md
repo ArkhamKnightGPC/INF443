@@ -85,4 +85,4 @@ In this lab, we simulated an N particle spring network using explicit Euler for 
 
 ## Course Project
 
-To come...
+The course project has been developed on a [different repository](https://github.com/ArkhamKnightGPC/OpenGL_AncientEgyptProject).
